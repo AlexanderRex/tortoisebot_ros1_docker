@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+  tortoisebot-ros1-gazebo-container:
+    build:
+      context: ./tortoisebot-ros1-gazebo
+    container_name: tortoisebot-ros1-gazebo
