@@ -1,6 +1,44 @@
-version: "3.3"
 services:
   tortoisebot-ros1-gazebo-container:
     build:
       context: ./tortoisebot-ros1-gazebo
+    image: tortoisebot-ros1-gazebo
     container_name: tortoisebot-ros1-gazebo
+    stdin_open: true
+    tty: true
+    network_mode: host
+    command: /bin/bash
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.Xauthority:/root/.Xauthority:rw
+      - /dev/dri:/dev/dri
+
+  tortoisebot-ros1-slam-container:
+    build:
+      context: ./tortoisebot-ros1-slam
+    image: tortoisebot-ros1-slam
+    container_name: tortoisebot-ros1-slam
+    stdin_open: true
+    tty: true
+    network_mode: host
+    command: /bin/bash
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ~/.Xauthority:/root/.Xauthority:rw
+      - /dev/dri:/dev/dri
+
+  tortoisebot-ros1-waypoints:
+    build:
+      context: ./tortoisebot-ros1-waypoints
+    image: tortoisebot-ros1-waypoints
+    container_name: tortoisebot-ros1-waypoints
+    stdin_open: true
+    tty: true
+    network_mode: host
+    command: /bin/bash

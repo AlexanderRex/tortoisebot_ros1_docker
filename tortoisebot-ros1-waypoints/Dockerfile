@@ -14,17 +14,19 @@ RUN apt update \
     && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - \
     && apt update \
     && apt install -y --no-install-recommends ros-noetic-desktop-full \
+    && apt install -y ros-noetic-rosbridge-suite ros-noetic-slam-gmapping \
     && echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc \
     && apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
     && rosdep init \
     && rosdep update
 
-# Create working directory and clone the project repository
 RUN mkdir -p ~/simulation_ws/src \
     && git clone -b noetic https://github.com/rigbetellabs/tortoisebot.git ~/simulation_ws/src/tortoisebot
 
+RUN git clone https://github.com/AlexanderRex/course_web_dev_ros.git ~/simulation_ws/src/course_web_dev_ros
+
 # Remove all folders except tortoisebot_gazebo and tortoisebot_description
-RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_gazebo' -o -name 'tortoisebot_description' \) -exec rm -rf {} +
+RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_slam' -o -name 'tortoisebot_description' \) -exec rm -rf {} +
 
 # Build the workspace
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ~/simulation_ws && catkin_make"

@@ -23,11 +23,11 @@ RUN apt update \
 RUN mkdir -p ~/simulation_ws/src \
     && git clone -b noetic https://github.com/rigbetellabs/tortoisebot.git ~/simulation_ws/src/tortoisebot
 
-# Remove all folders except tortoisebot_gazebo and tortoisebot_description
-RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_gazebo' -o -name 'tortoisebot_description' \) -exec rm -rf {} +
-
 # Build the workspace
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ~/simulation_ws && catkin_make"
+
+# Remove all folders except tortoisebot_gazebo
+RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! -name 'tortoisebot_slam' -exec rm -rf {} +
 
 # Source the setup.bash
 RUN echo "source ~/simulation_ws/devel/setup.bash" >> ~/.bashrc
