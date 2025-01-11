@@ -24,11 +24,26 @@ roslaunch tortoisebot_gazebo tortoisebot_playground.launch
 ### tortoisebot-ros1-slam
 
 ```
-roslaunch course_web_dev_ros mapping.launch
+roslaunch tortoisebot_slam mapping.launch
 ```
 
-### tortoisebot-ros1-slam
+### tortoisebot-ros1-waypoints
 
 ```
 rosrun course_web_dev_ros tortoisebot_action_server.py
+```
+
+### tortoisebot-ros1-webapp
+
+```
+cd ~/simulation_ws/tortoisebot_webapp
+python -m http.server 7000
+```
+
+```
+roslaunch course_web_dev_ros tf2_web.launch
+```
+
+```
+roslaunch course_web_dev_ros web.launch
 ```

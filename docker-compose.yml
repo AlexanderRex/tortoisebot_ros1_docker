@@ -42,3 +42,15 @@ services:
     tty: true
     network_mode: host
     command: /bin/bash
+
+  tortoisebot-ros1-webapp:
+    build:
+      context: ./tortoisebot-ros1-webapp
+    image: tortoisebot-ros1-webapp
+    environment:
+      - SLOT_ROSBRIDGE_PORT=20001
+    container_name: tortoisebot-ros1-webapp
+    stdin_open: true
+    tty: true
+    network_mode: host
+    command: /bin/bash

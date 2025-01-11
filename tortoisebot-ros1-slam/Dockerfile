@@ -21,7 +21,7 @@ RUN apt update \
     && rosdep update
 
 RUN mkdir -p ~/simulation_ws/src \
-    && git clone -b noetic https://github.com/rigbetellabs/tortoisebot.git ~/simulation_ws/src/tortoisebot
+    && git clone https://github.com/AlexanderRex/tortoisebot.git ~/simulation_ws/src/tortoisebot
 
 RUN git clone https://github.com/AlexanderRex/course_web_dev_ros.git ~/simulation_ws/src/course_web_dev_ros
 

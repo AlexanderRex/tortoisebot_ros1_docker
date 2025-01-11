@@ -21,7 +21,7 @@ RUN apt update \
 
 # Create working directory and clone the project repository
 RUN mkdir -p ~/simulation_ws/src \
-    && git clone -b noetic https://github.com/rigbetellabs/tortoisebot.git ~/simulation_ws/src/tortoisebot
+    && git clone https://github.com/AlexanderRex/tortoisebot.git ~/simulation_ws/src/tortoisebot
 
 # Remove all folders except tortoisebot_gazebo and tortoisebot_description
 RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_gazebo' -o -name 'tortoisebot_description' \) -exec rm -rf {} +
