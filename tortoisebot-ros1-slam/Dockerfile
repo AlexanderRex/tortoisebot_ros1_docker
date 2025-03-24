@@ -4,7 +4,7 @@ FROM nvidia/cuda:11.7.1-base-ubuntu20.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
-# Minimal setup and install ROS Noetic
+# Minimal setup and install ROS Noetic and necessary build tools
 RUN apt update \
     && apt install -y locales lsb-release curl gnupg2 git tzdata \
     && ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime \
@@ -16,20 +16,37 @@ RUN apt update \
     && apt install -y --no-install-recommends ros-noetic-desktop-full \
     && apt install -y ros-noetic-rosbridge-suite ros-noetic-slam-gmapping \
     && echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc \
-    && apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
+    && apt install -y python3-rosdep python3-rosinstall python3-catkin-tools python3-rosinstall-generator python3-wstool build-essential ninja-build stow \
     && rosdep init \
     && rosdep update
 
+RUN mkdir -p ~/cartographer_ws/src
+WORKDIR /root/cartographer_ws/src
+RUN wstool init . \
+    && wstool merge -t . https://raw.githubusercontent.com/cartographer-project/cartographer_ros/master/cartographer_ros.rosinstall \
+    && wstool update -t .
+
+WORKDIR /root/cartographer_ws
+RUN rosdep install --from-paths src --ignore-src --rosdistro=noetic -y --skip-keys="libabsl-dev"
+
+WORKDIR /root/cartographer_ws/src/cartographer
+RUN ./scripts/install_abseil.sh
+
+WORKDIR /root/cartographer_ws
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make_isolated --install --use-ninja"
+
 RUN mkdir -p ~/simulation_ws/src \
-    && git clone https://github.com/AlexanderRex/tortoisebot.git ~/simulation_ws/src/tortoisebot
+    && git clone https://github.com/AlexanderRex/tortoisebot.git ~/simulation_ws/src/tortoisebot \
+    && git clone https://github.com/AlexanderRex/course_web_dev_ros.git ~/simulation_ws/src/course_web_dev_ros
 
-RUN git clone https://github.com/AlexanderRex/course_web_dev_ros.git ~/simulation_ws/src/course_web_dev_ros
+RUN bash -c "find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_slam' -o -name 'tortoisebot_description' -o -name 'tortoisebot_firmware' -o -name 'tortoisebot_navigation' \) -exec rm -rf {} +"
 
-# Remove all folders except tortoisebot_gazebo and tortoisebot_description
-RUN find ~/simulation_ws/src/tortoisebot/* -maxdepth 0 -type d ! \( -name 'tortoisebot_slam' -o -name 'tortoisebot_description' \) -exec rm -rf {} +
 
-# Build the workspace
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && cd ~/simulation_ws && catkin_make"
+WORKDIR /root/simulation_ws
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 
-# Source the setup.bash
-RUN echo "source ~/simulation_ws/devel/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
+    echo "source ~/cartographer_ws/install_isolated/setup.bash --extend" >> ~/.bashrc && \
+    echo "source ~/simulation_ws/devel/setup.bash --extend" >> ~/.bashrc
+
+CMD ["/bin/bash"]

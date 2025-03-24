@@ -36,8 +36,8 @@ rosrun course_web_dev_ros tortoisebot_action_server.py
 ### tortoisebot-ros1-webapp
 
 ```
-cd ~/simulation_ws/tortoisebot_webapp
-python -m http.server 7000
+cd ~/simulation_ws/src/tortoisebot_webapp
+python3 -m http.server 7000
 ```
 
 ```
@@ -46,4 +46,10 @@ roslaunch course_web_dev_ros tf2_web.launch
 
 ```
 roslaunch course_web_dev_ros web.launch
+```
+
+To connect to ros server
+
+```
+ws://localhost:9090
 ```

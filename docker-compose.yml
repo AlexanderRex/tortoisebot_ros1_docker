@@ -28,6 +28,10 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/root/.Xauthority
+      - ROS_MASTER_URI=http://192.168.18.81:11311 #change to your master uri
+      - ROS_IP=192.168.18.81 #change to your local ip
+      - ROS_HOSTNAME=192.168.18.81
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ~/.Xauthority:/root/.Xauthority:rw
@@ -48,7 +52,7 @@ services:
       context: ./tortoisebot-ros1-webapp
     image: tortoisebot-ros1-webapp
     environment:
-      - SLOT_ROSBRIDGE_PORT=20001
+      - SLOT_ROSBRIDGE_PORT=9090
     container_name: tortoisebot-ros1-webapp
     stdin_open: true
     tty: true
