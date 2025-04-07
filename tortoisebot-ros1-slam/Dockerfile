@@ -14,9 +14,9 @@ RUN apt update \
     && curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - \
     && apt update \
     && apt install -y --no-install-recommends ros-noetic-desktop-full \
-    && apt install -y ros-noetic-rosbridge-suite ros-noetic-slam-gmapping \
+    && apt install -y ros-noetic-rosbridge-suite ros-noetic-slam-gmapping ros-noetic-dwa-local-planner ros-noetic-map-server ros-noetic-move-base ros-noetic-teleop-twist-keyboard \
     && echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc \
-    && apt install -y python3-rosdep python3-rosinstall python3-catkin-tools python3-rosinstall-generator python3-wstool build-essential ninja-build stow \
+    && apt install -y python3-rosdep python3-rosinstall python3-catkin-tools python3-rosinstall-generator python3-wstool build-essential ninja-build stow iputils-ping netcat-openbsd\
     && rosdep init \
     && rosdep update
 

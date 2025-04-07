@@ -29,13 +29,15 @@ services:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
       - XAUTHORITY=/root/.Xauthority
-      - ROS_MASTER_URI=http://192.168.18.81:11311 #change to your master uri
+      - ROS_MASTER_URI=http://alexthunderrex:11311 #change to your master uri
       - ROS_IP=192.168.18.81 #change to your local ip
-      - ROS_HOSTNAME=192.168.18.81
+      - ROS_HOSTNAME=alexthunderrex
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ~/.Xauthority:/root/.Xauthority:rw
       - /dev/dri:/dev/dri
+    extra_hosts:
+      - "ubuntu:192.168.18.90"
 
   tortoisebot-ros1-waypoints:
     build:
